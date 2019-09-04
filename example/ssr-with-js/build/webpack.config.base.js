@@ -4,10 +4,10 @@ const paths = require('./paths')
 const path = require('path')
 // style files regexes
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const getStyleLoaders = require('./util').getStyleLoaders
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent')
+const getStyleLoaders = require('./util').getStyleLoaders
 
-let webpackModule = {
+const webpackModule = {
   strictExportPresence: true,
   rules: [
     { parser: { requireEnsure: false } },
@@ -23,13 +23,22 @@ let webpackModule = {
         },
         {
           test: /\.(js|mjs|jsx|ts|tsx)$/,
-          include: paths.appSrc,
+          exclude: /node_modules/,
           loader: require.resolve('babel-loader'),
           options: {
             cacheDirectory: true,
             cacheCompression: false,
             presets: [
-              '@babel/preset-react'
+              [
+                require.resolve('@babel/preset-env'),
+                {
+                  modules: 'false'
+                }
+              ],
+              require.resolve('@babel/preset-react')
+            ],
+            plugins: [
+              require.resolve('@babel/plugin-transform-runtime')
             ]
           }
         },
@@ -84,6 +93,10 @@ let webpackModule = {
 }
 
 module.exports = {
+  stats: {
+    children: false,
+    entrypoints: false
+  },
   mode: process.env.NODE_ENV,
   resolve: {
     alias: {

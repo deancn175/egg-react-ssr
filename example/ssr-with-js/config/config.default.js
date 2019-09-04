@@ -1,11 +1,11 @@
-const resolvePath = (path) => require('path').resolve(process.cwd(), path)
+const resolvePath = (path) => require('path').resolve(__dirname, path)
 
 module.exports = {
   keys: 'eggssr',
   type: 'ssr', // 指定运行类型可设置为csr切换为客户端渲染
   static: {
     prefix: '/',
-    dir: resolvePath('dist')
+    dir: resolvePath('../dist')
   },
   routes: [
     {
@@ -23,15 +23,14 @@ module.exports = {
       handler: 'index'
     }
   ],
-  baseDir: resolvePath(''),
-  template: resolvePath('web/index.html'), // 使用的模版文件路径
-  injectCss: (chunkName) => ([
-    `/static/css/${chunkName}.chunk.css`
-  ]), // 客户端需要加载的静态样式表
-  injectScript: (chunkName) => ([
-    `<script src='/static/js/runtime~${chunkName}.js'></script>`,
+  baseDir: resolvePath('../'),
+  injectCss: [
+    `/static/css/Page.chunk.css`
+  ], // 客户端需要加载的静态样式表
+  injectScript: [
+    `<script src='/static/js/runtime~Page.js'></script>`,
     `<script src='/static/js/vendor.chunk.js'></script>`,
-    `<script src='/static/js/${chunkName}.chunk.js'></script>`
-  ]), // 客户端需要加载的静态资源文件表
-  serverJs: (chunkName) => resolvePath(`dist/${chunkName}.server.js`)
+    `<script src='/static/js/Page.chunk.js'></script>`
+  ], // 客户端需要加载的静态资源文件表
+  serverJs: resolvePath(`../dist/Page.server.js`)
 }

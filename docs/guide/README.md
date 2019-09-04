@@ -18,6 +18,11 @@
 
 [ReactDOMServer](https://reactjs.org/docs/react-dom-server.html)React官方提供的服务端渲染有关的库
 
+## 执行环境
+
+- 服务器Node.js >= 7.6， 为了原生的使用async/await语法
+- 浏览器版本大于等于IE9, React支持到IE9，但为了更好的在IE下使用，你可能需要引入[Polyfill](https://reactjs.org/docs/javascript-environment-requirements.html)
+
 ## 功能/特性
 
 以下是该应用具有的功能点
@@ -34,6 +39,9 @@
 - 支持tree shaking以及打包去重依赖，使得打包的bundle非常小，为同样复杂度的next.js项目的0.4倍
 - 支持csr/ssr自定义layout，无需通过path来手动区分
 - 支持选择某个具体的组件在客户端还是服务端进行渲染
+- 配套结合[antd](https://github.com/ykfe/egg-react-ssr/tree/master/example/ssr-with-antd)的example的实现
+- 配套结合[react-loadable](https://github.com/ykfe/egg-react-ssr/tree/master/example/ssr-with-loadable)做路由分割的example的实现
+- 配套结合[dva](https://github.com/ykfe/egg-react-ssr/tree/master/example/ssr-with-dva)做数据管理的example的实现
 
 ### 开发中
 

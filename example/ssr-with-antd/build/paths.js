@@ -35,7 +35,7 @@ const getPublicUrl = appPackageJson =>
 function getServedPath (appPackageJson) {
   const publicUrl = getPublicUrl(appPackageJson)
   const servedUrl =
-    envPublicUrl || (publicUrl ? url.parse(publicUrl).pathname : '/')
+    envPublicUrl || (publicUrl ? url.URL(publicUrl).pathname : '/')
   return ensureSlash(servedUrl, true)
 }
 
@@ -65,7 +65,6 @@ module.exports = {
   appNodeModules: resolveApp('node_modules'),
   publicUrl: getPublicUrl(resolveApp('package.json')),
   servedPath: getServedPath(resolveApp('package.json')),
-  template: resolveApp('web/index.html'),
   resolveApp: resolveApp
 }
 

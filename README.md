@@ -1,6 +1,12 @@
-# Egg + React + SSR应用骨架
+# Egg + React + SSR 应用骨架
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+<a href="https://circleci.com/gh/ykfe"><img src="https://img.shields.io/circleci/build/github/ykfe/egg-react-ssr/dev.svg" alt="Build Status"></a>
+<a href="https://codecov.io/gh/ykfe/egg-react-ssr"><img src="https://img.shields.io/codecov/c/github/ykfe/egg-react-ssr/dev.svg" alt="Coverage Status"></a>
+<img src="https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square" alt="All Contributors">
+<a href="https://standardjs.com"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg" alt="standardjs"></a>
+<a href="https://github.com/facebook/jest"><img src="https://img.shields.io/badge/tested_with-jest-99424f.svg" alt="License"></a>
+<a href="https://github.com/ykfe/egg-react-ssr"><img src="https://img.shields.io/npm/l/vue.svg" alt="License"></a>
+<img src="https://img.shields.io/badge/node-%3E=8-green.svg" alt="Node">
 
 最小而美的服务端渲染应用骨架，特点
 
@@ -57,6 +63,11 @@ getInitialProps入参对象的属性如下：
 - ctx: Node应用请求的上下文(仅在SSR阶段可以获取)
 - Router Props: 路由信息，包括pathname以及Router params等信息，详细信息参考react-router文档
 
+## 执行环境
+
+- 服务器Node.js >= 7.6， 为了原生的使用async/await语法
+- 浏览器版本大于等于IE9, React支持到IE9，但为了更好的在IE下使用，你可能需要引入[Polyfill](https://reactjs.org/docs/javascript-environment-requirements.html)
+
 ### 特性
 
 - [x] 基于cra脚手架开发，由cra开发的React App可无缝迁移，如果你熟悉cra的配置，上手成本几乎为0
@@ -68,6 +79,10 @@ getInitialProps入参对象的属性如下：
 - [x] 稳定性经过线上大规模应用验证，可提供性能优化方案
 - [x] 支持tree shaking以及打包去重依赖，使得打包的bundle非常小，为同样复杂度的next.js项目的0.4倍
 - [x] 支持csr/ssr自定义layout，无需通过path来手动区分
+- [x] 配套结合[antd](https://github.com/ykfe/egg-react-ssr/tree/master/example/ssr-with-antd)的example的实现
+- [x] 配套结合[react-loadable](https://github.com/ykfe/egg-react-ssr/tree/master/example/ssr-with-loadable)做路由分割的example的实现
+- [x] 配套结合[dva](https://github.com/ykfe/egg-react-ssr/tree/master/example/ssr-with-dva)做数据管理的example的实现
+- [x] 抛弃传统模版引擎，拥抱 React 组件，使用JSX来作为模版
 - [ ] 配套[TypeScript](https://github.com/ykfe/egg-react-ssr-typescript)版本的实现
 - [ ] 配套serverless版本的实现
 
@@ -108,16 +123,15 @@ module.exports = {
         handler: 'index'
       }
     ],
-    template: resolvePath('web/index.html'), // 使用的模版文件路径
-    injectCss: (chunkName) => ([
-      `/static/css/${chunkName}.chunk.css`
-    ]), // 客户端需要加载的静态css文件资源
-    injectScript: (chunkName) => ([
-      `<script src='/static/js/runtime~${chunkName}.js'></script>`,
-      `<script src='/static/js/vendor.chunk.js'></script>`,
-      `<script src='/static/js/${chunkName}.chunk.js'></script>`
-    ]), // 客户端需要加载的静态js文件资源
-    serverJs: (chunkName) => resolvePath(`dist/${chunkName}.server.js`) // 服务端需要使用的打包后的serverRender方法js文件的路径
+    injectCss: [
+    `/static/css/Page.chunk.css`
+  ], // 客户端需要加载的静态样式表
+  injectScript: [
+    `<script src='/static/js/runtime~Page.js'></script>`,
+    `<script src='/static/js/vendor.chunk.js'></script>`,
+    `<script src='/static/js/Page.chunk.js'></script>`
+  ], // 客户端需要加载的静态资源文件表
+  serverJs: resolvePath(`dist/Page.server.js`) // 打包后的server端的bundle文件路径
 }
 ```
 
@@ -156,7 +170,6 @@ module.exports = {
     ├── assets
     │   └── common.less
     ├── entry.js // webpack打包入口文件，分环境导出不同配置
-    ├── index.html // 页面骨架模版
     ├── layout
     │   ├── index.js // 页面布局
     │   └── index.less
@@ -197,6 +210,10 @@ $ npm run build // 打包服务端以及客户端资源文件
 $ npm run analyze // 可视化分析客户端打包的资源详情
 ```
 
+## Changelog
+
+每一个版本的详细改动请查看 [release notes](https://github.com/ykfe/egg-react-ssr/releases)
+
 ## 与其他方案的对比
 
 - 与[easy-team](https://github.com/ykfe/egg-react-ssr/wiki/与easy-team实现方案的对比)方案的对比  
@@ -208,9 +225,13 @@ $ npm run analyze // 可视化分析客户端打包的资源详情
 欢迎直接扫码加入钉钉群
 <img src="https://img.alicdn.com/tfs/TB1CONSclGE3KVjSZFhXXckaFXa-750-990.jpg" width="300">
 
-## 本地如何调试源码并贡献你的代码
+## 本地如何调试源码
 
 请查看该[wiki](https://github.com/ykfe/egg-react-ssr/wiki/%E6%9C%AC%E5%9C%B0%E5%A6%82%E4%BD%95%E8%B0%83%E8%AF%95%E6%BA%90%E7%A0%81%E5%B9%B6%E8%B4%A1%E7%8C%AE%E4%BD%A0%E7%9A%84%E4%BB%A3%E7%A0%81)
+
+## 如何向本项目贡献代码
+
+请查看该[wiki](https://github.com/ykfe/egg-react-ssr/blob/master/CONTRIBUTING.md)
 
 ## Contributors
 
@@ -218,7 +239,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
-<table><tr><td align="center"><a href="https://github.com/zhangyuang"><img src="https://avatars3.githubusercontent.com/u/17424434?v=4" width="100px;" alt="LeonCheung"/><br /><sub><b>LeonCheung</b></sub></a><br /><a href="https://github.com/ykfe/egg-react-ssr/commits?author=zhangyuang" title="Code">💻</a></td><td align="center"><a href="http://i5ting.com"><img src="https://avatars3.githubusercontent.com/u/3118295?v=4" width="100px;" alt="狼叔"/><br /><sub><b>狼叔</b></sub></a><br /><a href="https://github.com/ykfe/egg-react-ssr/commits?author=i5ting" title="Code">💻</a></td><td align="center"><a href="http://www.lessing.online/xx-blog/"><img src="https://avatars2.githubusercontent.com/u/21156871?v=4" width="100px;" alt="Xu Zhiyong"/><br /><sub><b>Xu Zhiyong</b></sub></a><br /><a href="https://github.com/ykfe/egg-react-ssr/issues?q=author%3AJohnieXu" title="Bug reports">🐛</a></td><td align="center"><a href="https://github.com/zhusjfaker"><img src="https://avatars1.githubusercontent.com/u/31839470?v=4" width="100px;" alt="zhushijie"/><br /><sub><b>zhushijie</b></sub></a><br /><a href="https://github.com/ykfe/egg-react-ssr/commits?author=zhusjfaker" title="Code">💻</a></td><td align="center"><a href="https://github.com/jxycbjhc"><img src="https://avatars0.githubusercontent.com/u/16661897?v=4" width="100px;" alt="snoy"/><br /><sub><b>snoy</b></sub></a><br /><a href="https://github.com/ykfe/egg-react-ssr/commits?author=jxycbjhc" title="Documentation">📖</a></td><td align="center"><a href="http://zxy.im"><img src="https://avatars2.githubusercontent.com/u/15117664?v=4" width="100px;" alt="zhaoxingyue"/><br /><sub><b>zhaoxingyue</b></sub></a><br /><a href="https://github.com/ykfe/egg-react-ssr/commits?author=zhaoxingyue" title="Documentation">📖</a></td></tr></table>
+<table><tr><td align="center"><a href="https://github.com/zhangyuang"><img src="https://avatars3.githubusercontent.com/u/17424434?v=4" width="100px;" alt="LeonCheung"/><br /><sub><b>LeonCheung</b></sub></a><br /><a href="https://github.com/ykfe/egg-react-ssr/commits?author=zhangyuang" title="Code">💻</a></td><td align="center"><a href="http://i5ting.com"><img src="https://avatars3.githubusercontent.com/u/3118295?v=4" width="100px;" alt="狼叔"/><br /><sub><b>狼叔</b></sub></a><br /><a href="https://github.com/ykfe/egg-react-ssr/commits?author=i5ting" title="Code">💻</a></td><td align="center"><a href="http://www.lessing.online/xx-blog/"><img src="https://avatars2.githubusercontent.com/u/21156871?v=4" width="100px;" alt="Xu Zhiyong"/><br /><sub><b>Xu Zhiyong</b></sub></a><br /><a href="https://github.com/ykfe/egg-react-ssr/issues?q=author%3AJohnieXu" title="Bug reports">🐛</a></td><td align="center"><a href="https://github.com/zhusjfaker"><img src="https://avatars1.githubusercontent.com/u/31839470?v=4" width="100px;" alt="zhushijie"/><br /><sub><b>zhushijie</b></sub></a><br /><a href="https://github.com/ykfe/egg-react-ssr/commits?author=zhusjfaker" title="Code">💻</a></td><td align="center"><a href="https://github.com/jxycbjhc"><img src="https://avatars0.githubusercontent.com/u/16661897?v=4" width="100px;" alt="snoy"/><br /><sub><b>snoy</b></sub></a><br /><a href="https://github.com/ykfe/egg-react-ssr/commits?author=jxycbjhc" title="Documentation">📖</a></td><td align="center"><a href="http://zxy.im"><img src="https://avatars2.githubusercontent.com/u/15117664?v=4" width="100px;" alt="zhaoxingyue"/><br /><sub><b>zhaoxingyue</b></sub></a><br /><a href="https://github.com/ykfe/egg-react-ssr/commits?author=zhaoxingyue" title="Documentation">📖</a></td><td align="center"><a href="http://www.puacode.com"><img src="https://avatars3.githubusercontent.com/u/48011106?v=4" width="100px;" alt="九牧"/><br /><sub><b>九牧</b></sub></a><br /><a href="https://github.com/ykfe/egg-react-ssr/issues?q=author%3Adeancn175" title="Bug reports">🐛</a></td></tr><tr><td align="center"><a href="https://github.com/robert7git"><img src="https://avatars2.githubusercontent.com/u/6889441?v=4" width="100px;" alt="robert.xu"/><br /><sub><b>robert.xu</b></sub></a><br /><a href="https://github.com/ykfe/egg-react-ssr/commits?author=robert7git" title="Code">💻</a></td></tr></table>
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 

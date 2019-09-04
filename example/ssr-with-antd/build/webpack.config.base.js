@@ -1,4 +1,3 @@
-
 'use strict'
 
 const paths = require('./paths')
@@ -8,7 +7,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const getStyleLoaders = require('./util').getStyleLoaders
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent')
 
-let webpackModule = {
+const webpackModule = {
   strictExportPresence: true,
   rules: [
     { parser: { requireEnsure: false } },
@@ -24,20 +23,27 @@ let webpackModule = {
         },
         {
           test: /\.(js|mjs|jsx|ts|tsx)$/,
-          include: paths.appSrc,
+          exclude: /node_modules/,
           loader: require.resolve('babel-loader'),
           options: {
             cacheDirectory: true,
             cacheCompression: false,
             presets: [
+              [
+                '@babel/preset-env',
+                {
+                  modules: 'false'
+                }
+              ],
               '@babel/preset-react'
             ],
             plugins: [
+              '@babel/plugin-transform-runtime',
               [
                 'import',
                 {
-                  'libraryName': 'antd',
-                  'style': 'css'
+                  libraryName: 'antd',
+                  style: 'css'
                 }
               ]
             ]
@@ -64,8 +70,7 @@ let webpackModule = {
           use: getStyleLoaders(
             {
               importLoaders: 2,
-              localIdentName: '[local]',
-              javascriptEnabled: true
+              localIdentName: '[local]'
             },
             'less-loader'
           ),
@@ -95,6 +100,10 @@ let webpackModule = {
 }
 
 module.exports = {
+  stats: {
+    children: false,
+    entrypoints: false
+  },
   mode: process.env.NODE_ENV,
   resolve: {
     alias: {

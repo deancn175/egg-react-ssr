@@ -45,12 +45,15 @@ module.exports = {
                 'getInitialProps',
                 'hydrate',
                 'stream',
+                'ssr-csr',
                 'hmr',
                 'optimize',
+                'dev',
                 'publish',
                 'ts',
                 'serverless',
-                'faq'
+                'faq',
+                'update'
               ],
             },
           ]

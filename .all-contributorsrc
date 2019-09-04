@@ -58,6 +58,24 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "deancn175",
+      "name": "九牧",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/48011106?v=4",
+      "profile": "http://www.puacode.com",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "robert7git",
+      "name": "robert.xu",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/6889441?v=4",
+      "profile": "https://github.com/robert7git",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

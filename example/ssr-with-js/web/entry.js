@@ -11,10 +11,10 @@ const clientRender = async () => {
     <BrowserRouter>
       {
         // 使用高阶组件getWrappedComponent使得csr首次进入页面以及csr/ssr切换路由时调用getInitialProps
-        Routes.map(({ path, exact, Component }, key) => {
+        Routes.map(({ path, exact, Component }) => {
           const ActiveComponent = Component()
           const Layout = ActiveComponent.Layout || defaultLayout
-          return <Route exact={exact} key={key} path={path} render={() => {
+          return <Route exact={exact} key={path} path={path} render={() => {
             const WrappedComponent = getWrappedComponent(ActiveComponent)
             return <Layout><WrappedComponent /></Layout>
           }} />
@@ -31,11 +31,11 @@ const clientRender = async () => {
 const serverRender = async (ctx) => {
   // 服务端渲染 根据ctx.path获取请求的具体组件，调用getInitialProps并渲染
   const ActiveComponent = getComponent(Routes, ctx.path)()
-  const serverData = ActiveComponent.getInitialProps ? await ActiveComponent.getInitialProps(ctx) : {}
   const Layout = ActiveComponent.Layout || defaultLayout
+  const serverData = ActiveComponent.getInitialProps ? await ActiveComponent.getInitialProps(ctx) : {}
   ctx.serverData = serverData
   return <StaticRouter location={ctx.req.url} context={serverData}>
-    <Layout>
+    <Layout layoutData={ctx}>
       <ActiveComponent {...serverData} />
     </Layout>
   </StaticRouter>
